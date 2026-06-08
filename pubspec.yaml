@@ -41,6 +41,7 @@ dependencies:
   country_state_picker: ^0.0.5
   cupertino_icons: ^1.0.2
   dio: ^5.2.1+1
+  flutter_dotenv: ^5.2.1
   email_validator: ^2.1.17
   firebase_core: ^3.4.0
   firebase_crashlytics: ^4.1.0
@@ -96,6 +97,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/image/
     - assets/icon/
 

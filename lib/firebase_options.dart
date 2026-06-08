@@ -3,17 +3,8 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-/// Default [FirebaseOptions] for use with your Firebase apps.
-///
-/// Example:
-/// ```dart
-/// import 'firebase_options.dart';
-/// // ...
-/// await Firebase.initializeApp(
-///   options: DefaultFirebaseOptions.currentPlatform,
-/// );
-/// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -46,33 +37,32 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB82wdz-eV7wfofqob_vfg-xZ7lju3irYU',
-    appId: '1:963033245480:web:7238c7f44964c8846d921d',
-    messagingSenderId: '963033245480',
-    projectId: 'utusan-app',
-    authDomain: 'utusan-app.firebaseapp.com',
-    storageBucket: 'utusan-app.firebasestorage.app',
-    measurementId: 'G-0DF2HB0K78',
+  static FirebaseOptions get web => FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_WEB_API_KEY']!,
+    appId: dotenv.env['FIREBASE_WEB_APP_ID']!,
+    messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID']!,
+    projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID']!,
+    authDomain: dotenv.env['FIREBASE_WEB_AUTH_DOMAIN']!,
+    storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET']!,
+    measurementId: dotenv.env['FIREBASE_WEB_MEASUREMENT_ID']!,
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDmIIzEm2qqioc4Ve0CWPGEM2dgg4OPSRc',
-    appId: '1:963033245480:android:16769e82f077129c6d921d',
-    messagingSenderId: '963033245480',
-    projectId: 'utusan-app',
-    storageBucket: 'utusan-app.firebasestorage.app',
+  static FirebaseOptions get android => FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_ANDROID_API_KEY']!,
+    appId: dotenv.env['FIREBASE_ANDROID_APP_ID']!,
+    messagingSenderId: dotenv.env['FIREBASE_ANDROID_MESSAGING_SENDER_ID']!,
+    projectId: dotenv.env['FIREBASE_ANDROID_PROJECT_ID']!,
+    storageBucket: dotenv.env['FIREBASE_ANDROID_STORAGE_BUCKET']!,
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBHa8Q4IGee-NF1zwkmb-VlKr2zNlTNI6g',
-    appId: '1:963033245480:ios:51020b53e8ae84186d921d',
-    messagingSenderId: '963033245480',
-    projectId: 'utusan-app',
-    storageBucket: 'utusan-app.firebasestorage.app',
-    androidClientId: '963033245480-ho14ihp7tbki2se9turkvvom8k9uh65m.apps.googleusercontent.com',
-    iosClientId: '963033245480-36o50ndihbe1efurg6cf600tjuqb54c6.apps.googleusercontent.com',
-    iosBundleId: 'com.example.utusanSarawak',
+  static FirebaseOptions get ios => FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_IOS_API_KEY']!,
+    appId: dotenv.env['FIREBASE_IOS_APP_ID']!,
+    messagingSenderId: dotenv.env['FIREBASE_IOS_MESSAGING_SENDER_ID']!,
+    projectId: dotenv.env['FIREBASE_IOS_PROJECT_ID']!,
+    storageBucket: dotenv.env['FIREBASE_IOS_STORAGE_BUCKET']!,
+    androidClientId: dotenv.env['FIREBASE_IOS_ANDROID_CLIENT_ID']!,
+    iosClientId: dotenv.env['FIREBASE_IOS_IOS_CLIENT_ID']!,
+    iosBundleId: dotenv.env['FIREBASE_IOS_BUNDLE_ID']!,
   );
-
 }
