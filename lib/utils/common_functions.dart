@@ -39,7 +39,14 @@ bool checkUriNeedConsume(String uri){
   return needConsume;
 }
 
-void customBeamToNamed(BuildContext context, double scrollPosition, String toUri, {int tabIndex = 0, int subTabIndex = 0}){
+void customBeamToNamed(
+  BuildContext context,
+  double scrollPosition,
+  String toUri, {
+  int tabIndex = 0,
+  int subTabIndex = 0,
+  Object? data,
+}){
   final beamer = Beamer.of(context);
   final scrollPositionState = Provider.of<ScrollPositionState>(context, listen: false);
   String fromUri = beamer.currentBeamLocation.state.routeInformation.uri.toString();
@@ -51,7 +58,7 @@ void customBeamToNamed(BuildContext context, double scrollPosition, String toUri
   }
 
   scrollPositionState.needConsume = false;
-  beamer.beamToNamed(toUri, replaceRouteInformation: false);
+  beamer.beamToNamed(toUri, replaceRouteInformation: false, data: data);
 }
 
 String encodeString(String input) {

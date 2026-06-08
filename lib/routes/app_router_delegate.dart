@@ -18,6 +18,7 @@ import 'package:utusan_sarawak/pages/top_story_page/top_story_page.dart';
 import 'package:utusan_sarawak/pages/popular_page/popular_page.dart';
 import 'package:utusan_sarawak/pages/topic_page/topic_page.dart';
 import 'package:utusan_sarawak/pages/unsubscribe_form_page/unsubscribe_form_page.dart';
+import 'package:utusan_sarawak/models/user/social_signup_data.dart';
 
 final appRouterDelegate = BeamerDelegate(
   initialPath: "/top",
@@ -45,7 +46,9 @@ final appRouterDelegate = BeamerDelegate(
       ),
       "/profile": (context, state, data) => const ProfilePage(),
       "/signin": (context, state, data) => const SigninPage(),
-      "/signup": (context, state, data) => const SignupPage(),
+      "/signup": (context, state, data) => SignupPage(
+        socialSignupData: data is SocialSignupData ? data : null,
+      ),
       "/forgot-password": (context, state, data) => const ForgotPasswordPage(),
       "/support-and-legal": (context, state, data) => const SupportAndLegalPage(),
       "/edit-profile": (context, state, data) => const EditProfilePage(),

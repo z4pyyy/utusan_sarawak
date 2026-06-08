@@ -9,7 +9,7 @@ class DefaultTheme extends AppTheme {
           id: "default_theme",
           description: "Default Theme",
           data: ThemeData.light().copyWith(
-            dialogTheme: DialogTheme(
+            dialogTheme: DialogThemeData(
               backgroundColor: const Color(0xFFFFFFFF),
               titleTextStyle: TextStyle(color: Colors.black, fontSize: 16.sp),
               contentTextStyle: TextStyle(color: Colors.black, fontSize: 10.sp),

@@ -11,7 +11,9 @@ import 'package:utusan_sarawak/models/user/user.dart';
 import 'package:utusan_sarawak/themes/theme_options.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:utusan_sarawak/utils/common_functions.dart';
-import 'package:utusan_sarawak/utils/firebase_dynamic_links.dart';
+import 'package:utusan_sarawak/models/article/article.dart';
+import 'package:utusan_sarawak/services/utusan_link_service.dart';
+import 'package:utusan_sarawak/stores/article_store/article_store.dart';
 import 'package:utusan_sarawak/utils/scroll_position_state.dart';
 
 class TopAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -45,6 +47,42 @@ class TopAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class TopAppBarState extends State<TopAppBar> {
+  Article? _findArticle(ArticleStore store, String title) {
+    for (final article in store.articleList) {
+      if (article.title == title) return article;
+    }
+    for (final article in store.stickyArticleList) {
+      if (article.title == title) return article;
+    }
+    for (final article in store.articleByTitle) {
+      if (article.title == title) return article;
+    }
+    for (final article in store.searchArticles) {
+      if (article.title == title) return article;
+    }
+    for (final list in store.articleByCategory.values) {
+      for (final article in list) {
+        if (article.title == title) return article;
+      }
+    }
+    for (final list in store.articleByTag.values) {
+      for (final article in list) {
+        if (article.title == title) return article;
+      }
+    }
+    for (final list in store.articleBySubcategory.values) {
+      for (final article in list) {
+        if (article.title == title) return article;
+      }
+    }
+    return null;
+  }
+
+  Future<Article?> _loadArticleByTitle(ArticleStore store, String title) async {
+    final articles = await store.loadArticleByTitle(title);
+    if (articles.isEmpty) return null;
+    return articles.first;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -194,8 +232,20 @@ class TopAppBarState extends State<TopAppBar> {
                           icon: Icons.share,
                           size: 28,
                           onPressed: () async{
-                            String link = await createDynamicLink(widget.articleId);
-                            await Share.share("Utusan Sarawak Article: $link");
+                            final articleStore = GetIt.I<ArticleStore>();
+                            final title = decodeString(widget.articleId);
+                            Article? article = _findArticle(articleStore, title);
+                            article ??= await _loadArticleByTitle(articleStore, title);
+                            if (article == null) {
+                              debugPrint('TopAppBar: article not found for share: $title');
+                              return;
+                            }
+                            final url = await UtusanLinkService.createArticleLink(article);
+                            if (url != null) {
+                              await Share.share(url);
+                            } else {
+                              debugPrint('TopAppBar: failed to create FlowLinks URL');
+                            }
                           }
                         ),
                       // if(widget.showShareButton)
@@ -213,3 +263,7 @@ class TopAppBarState extends State<TopAppBar> {
     );
   }
 }
+
+
+
+

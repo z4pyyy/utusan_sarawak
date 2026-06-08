@@ -135,7 +135,7 @@ class ArticleStore{
 
       try {
         articleList.clear();
-        Response response = await client.get("$apiUrl/posts?_fields=title,date,yoast_head_json,content,categories,tags,link&per_page=23");
+        Response response = await client.get("$apiUrl/posts?_fields=id,title,date,yoast_head_json,content,categories,tags,link&per_page=23");
         List<dynamic> data = response.data;
 
         for (var e in data){
@@ -162,7 +162,7 @@ class ArticleStore{
     int id = categoryIdToName.keys.firstWhere((element) => categoryIdToName[element] == category );
     for(var categoryId in allCategoryId){
       if(categoryId == id){
-        Response response = await client.get("$apiUrl/posts?_fields=title,date,yoast_head_json,content,categories,tags,link&per_page=20&categories=$categoryId");
+        Response response = await client.get("$apiUrl/posts?_fields=id,title,date,yoast_head_json,content,categories,tags,link&per_page=20&categories=$categoryId");
         List<dynamic> data = response.data;
 
         List<Article> articles = [];
@@ -179,9 +179,9 @@ class ArticleStore{
   Future<void> loadArticleBySubCategory(int subCategory, bool isTag) async{
     late Response response;
     if(isTag){
-      response = await client.get("$apiUrl/posts?_fields=title,date,yoast_head_json,content,categories,tags,link&per_page=20&tags=$subCategory");
+      response = await client.get("$apiUrl/posts?_fields=id,title,date,yoast_head_json,content,categories,tags,link&per_page=20&tags=$subCategory");
     }else{
-      response = await client.get("$apiUrl/posts?_fields=title,date,yoast_head_json,content,categories,tags,link&per_page=20&categories=$subCategory");
+      response = await client.get("$apiUrl/posts?_fields=id,title,date,yoast_head_json,content,categories,tags,link&per_page=20&categories=$subCategory");
     }
 
     List<dynamic> data = response.data;
@@ -211,7 +211,7 @@ class ArticleStore{
   }
 
   Future<void> loadStickyArticle() async{
-    Response response = await client.get("$apiUrl/posts?_fields=title,date,yoast_head_json,content,categories,tags,link&per_page=5&sticky=true");
+    Response response = await client.get("$apiUrl/posts?_fields=id,title,date,yoast_head_json,content,categories,tags,link&per_page=5&sticky=true");
     List<dynamic> data = response.data;
 
     stickyArticleList.clear();
@@ -223,7 +223,7 @@ class ArticleStore{
   }
 
   Future<List<Article>> loadArticleByTag(int tagId) async{
-    Response response = await client.get("$apiUrl/posts?_fields=title,date,yoast_head_json,content,categories,tags,link&per_page=5&tags=$tagId");
+    Response response = await client.get("$apiUrl/posts?_fields=id,title,date,yoast_head_json,content,categories,tags,link&per_page=5&tags=$tagId");
     List<dynamic> data = response.data;
 
     List<Article> articles = [];
@@ -239,7 +239,7 @@ class ArticleStore{
   }
 
   Future<Article> loadSingleArticleById(int id) async{
-    Response response = await client.get("$apiUrl/posts/$id?_fields=title,date,yoast_head_json,content,categories,tags,link");
+    Response response = await client.get("$apiUrl/posts/$id?_fields=id,title,date,yoast_head_json,content,categories,tags,link");
     final data = response.data;
 
     Article article = processWordpressApiResponse(data);
@@ -247,10 +247,10 @@ class ArticleStore{
   }
 
   Future<List<Article>> loadArticleByTitle(String title) async{
-    String safeTitle = title.replaceAll(RegExp(r"""[:–—!?.,'"@#$&()/]"""), '');
+    String safeTitle = title.replaceAll(RegExp(r"""[:??????!?.,'"@#$&()/]"""), '');
     String encodedTitle = Uri.encodeQueryComponent(safeTitle);
 
-    Response response = await client.get("$apiUrl/posts?search=$encodedTitle&_fields=title,date,yoast_head_json,content,categories,tags,link");
+    Response response = await client.get("$apiUrl/posts?search=$encodedTitle&_fields=id,title,date,yoast_head_json,content,categories,tags,link");
     List<dynamic> data = response.data;
 
     List<Article> articles = [];
@@ -264,12 +264,12 @@ class ArticleStore{
   }
 
   Future<List<Article>> loadSearchArticles(String title) async{
-    String safeTitle = title.replaceAll(RegExp(r"""[:–—!?.,"@#$&()/]"""), '');
+    String safeTitle = title.replaceAll(RegExp(r"""[:??????!?.,"@#$&()/]"""), '');
     String encodedTitle = Uri.encodeQueryComponent(safeTitle);
     int searchCountToShow = 10;
     int count = 0;
 
-    Response response = await client.get("$apiUrl/posts?search=\"$encodedTitle\"&_fields=title,date,yoast_head_json,content,categories,tags,link&per_page=99");
+    Response response = await client.get("$apiUrl/posts?search=\"$encodedTitle\"&_fields=id,title,date,yoast_head_json,content,categories,tags,link&per_page=99");
     List<dynamic> data = response.data;
 
     List<Article> articles = [];
@@ -311,6 +311,10 @@ class ArticleStore{
     var document = parse(wpPost["title"]["rendered"]);
     String title = removeAllHtmlTags(document.body!.text);
 
+    final rawId = wpPost["id"];
+    final int id = rawId is int ? rawId : int.parse(rawId.toString());
+
+
     String paragraph = wpPost["content"]["rendered"];
     List<Map<String, String>> content = [{
       "paragraph" : paragraph,
@@ -346,7 +350,7 @@ class ArticleStore{
     }
 
     bool isTagLink = false;
-    String link = wpPost["link"];
+    String link = wpPost["link"]?.toString() ?? "";
     int linkStartIndex = link.indexOf("utusansarawak.com.my/") + 21;
     int linkEndIndex = link.length;
     String subStr = link.substring(linkStartIndex, linkEndIndex);
@@ -355,6 +359,7 @@ class ArticleStore{
     }
 
     Article article = Article(
+      id: id,
       title: title,
       shortTitle: title,
       content: content,
@@ -364,9 +369,12 @@ class ArticleStore{
       published: published,
       tags: tags,
       isTagLink: isTagLink,
+      link: link,
     );
 
     return article;
   }
 
 }
+
+

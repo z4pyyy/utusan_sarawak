@@ -10,6 +10,7 @@ import 'package:utusan_sarawak/components/common/rounded_text_form_field.dart';
 import 'package:utusan_sarawak/components/common/vertical_white_space.dart';
 import 'package:utusan_sarawak/components/signup_page/signup_description.dart';
 import 'package:utusan_sarawak/enums/status.dart';
+import 'package:utusan_sarawak/models/user/social_signup_data.dart';
 import 'package:utusan_sarawak/models/user/user.dart';
 import 'package:utusan_sarawak/services/api_service.dart';
 import 'package:utusan_sarawak/themes/theme_options.dart';
@@ -19,7 +20,9 @@ import 'package:utusan_sarawak/utils/validation_helpers.dart';
 import 'package:sizer/sizer.dart';
 
 class SignupMain extends StatefulWidget {
-  const SignupMain({Key? key}) : super(key: key);
+  final SocialSignupData? socialSignupData;
+
+  const SignupMain({Key? key, this.socialSignupData}) : super(key: key);
 
   @override
   State<SignupMain> createState() => SignupMainState();
@@ -57,6 +60,8 @@ class SignupMainState extends State<SignupMain> {
   bool lastNameValidated = false;
   bool ageValidated = false;
   bool isChecked = false;
+
+  bool get _isSocialSignup => widget.socialSignupData != null;
 
   final selectState = [
     "Johor",
@@ -276,6 +281,41 @@ class SignupMainState extends State<SignupMain> {
   void initState(){
     super.initState();
     initializeFocusNode();
+    _applySocialPrefill();
+  }
+
+  void _applySocialPrefill() {
+    final socialData = widget.socialSignupData;
+    if (socialData == null) {
+      return;
+    }
+
+    if (socialData.email.isNotEmpty) {
+      _emailTextEditingController.text = socialData.email;
+      emailValidated = validateEmail(socialData.email) == null;
+    }
+
+    if (socialData.name != null && socialData.name!.trim().isNotEmpty) {
+      final parts = socialData.name!.trim().split(RegExp(r"\\s+"));
+      if (parts.isNotEmpty) {
+        _firstNameTextEditingController.text = parts.first;
+        firstNameValidated =
+            validateStringNotEmpty(parts.first, "first name") == null;
+      }
+      if (parts.length > 1) {
+        final lastName = parts.sublist(1).join(" ");
+        _lastNameTextEditingController.text = lastName;
+        lastNameValidated =
+            validateStringNotEmpty(lastName, "last name") == null;
+      }
+    }
+
+    _passwordTextEditingController.text = socialData.uid;
+    _confirmPasswordTextEditingController.text = socialData.uid;
+    passwordValidated = true;
+    confirmPasswordValidated = true;
+
+    checkButtonAllowed();
   }
 
   @override
@@ -495,123 +535,125 @@ class SignupMainState extends State<SignupMain> {
                         ),
                       ),
                       const VerticalWhiteSpace(height: 20),
-                      Text(
-                        "Kata laluan",
-                        style: TextStyle(
-                            fontSize:user.textSizeScale *  themeOptions.textSize1,
-                            fontWeight: FontWeight.w500
+                      if (!_isSocialSignup) ...[
+                        Text(
+                          "Kata laluan",
+                          style: TextStyle(
+                              fontSize:user.textSizeScale *  themeOptions.textSize1,
+                              fontWeight: FontWeight.w500
+                          ),
                         ),
-                      ),
-                      const VerticalWhiteSpace(height: 2),
-                      Text(
-                        "Kata laluan mesti mengandungi sekurang-kurangnya:",
-                        style: TextStyle(fontSize:user.textSizeScale *  themeOptions.textSize3,),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const HorizontalWhiteSpace(width: 20,),
-                          Text("\u2022", style: TextStyle(fontSize: user.textSizeScale * themeOptions.textSize3),),
-                          const HorizontalWhiteSpace(width: 10,),
-                          Expanded(
-                            child: Text(
-                              "8 aksara",
-                              style: TextStyle(
-                                fontSize: user.textSizeScale * themeOptions.textSize3,
+                        const VerticalWhiteSpace(height: 2),
+                        Text(
+                          "Kata laluan mesti mengandungi sekurang-kurangnya:",
+                          style: TextStyle(fontSize:user.textSizeScale *  themeOptions.textSize3,),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const HorizontalWhiteSpace(width: 20,),
+                            Text("\u2022", style: TextStyle(fontSize: user.textSizeScale * themeOptions.textSize3),),
+                            const HorizontalWhiteSpace(width: 10,),
+                            Expanded(
+                              child: Text(
+                                "8 aksara",
+                                style: TextStyle(
+                                  fontSize: user.textSizeScale * themeOptions.textSize3,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const HorizontalWhiteSpace(width: 20,),
-                          Text("\u2022", style: TextStyle(fontSize: user.textSizeScale * themeOptions.textSize3),),
-                          const HorizontalWhiteSpace(width: 10,),
-                          Expanded(
-                            child: Text(
-                              "Huruf besar dan huruf kecil",
-                              style: TextStyle(
-                                fontSize: user.textSizeScale * themeOptions.textSize3,
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const HorizontalWhiteSpace(width: 20,),
+                            Text("\u2022", style: TextStyle(fontSize: user.textSizeScale * themeOptions.textSize3),),
+                            const HorizontalWhiteSpace(width: 10,),
+                            Expanded(
+                              child: Text(
+                                "Huruf besar dan huruf kecil",
+                                style: TextStyle(
+                                  fontSize: user.textSizeScale * themeOptions.textSize3,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const HorizontalWhiteSpace(width: 20,),
-                          Text("\u2022", style: TextStyle(fontSize: user.textSizeScale * themeOptions.textSize3),),
-                          const HorizontalWhiteSpace(width: 10,),
-                          Expanded(
-                            child: Text(
-                              "1 nombor",
-                              style: TextStyle(
-                                fontSize: user.textSizeScale * themeOptions.textSize3,
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const HorizontalWhiteSpace(width: 20,),
+                            Text("\u2022", style: TextStyle(fontSize: user.textSizeScale * themeOptions.textSize3),),
+                            const HorizontalWhiteSpace(width: 10,),
+                            Expanded(
+                              child: Text(
+                                "1 nombor",
+                                style: TextStyle(
+                                  fontSize: user.textSizeScale * themeOptions.textSize3,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const HorizontalWhiteSpace(width: 20,),
-                          Text("\u2022", style: TextStyle(fontSize: user.textSizeScale * themeOptions.textSize3),),
-                          const HorizontalWhiteSpace(width: 10,),
-                          Expanded(
-                            child: Text(
-                              "1 simbol",
-                              style: TextStyle(
-                                fontSize: user.textSizeScale * themeOptions.textSize3,
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const HorizontalWhiteSpace(width: 20,),
+                            Text("\u2022", style: TextStyle(fontSize: user.textSizeScale * themeOptions.textSize3),),
+                            const HorizontalWhiteSpace(width: 10,),
+                            Expanded(
+                              child: Text(
+                                "1 simbol",
+                                style: TextStyle(
+                                  fontSize: user.textSizeScale * themeOptions.textSize3,
+                                ),
                               ),
                             ),
+                          ],
+                        ),
+                        const VerticalWhiteSpace(height: 10),
+                        SizedBox(
+                          child: RoundedTextFormField(
+                            focusNode: passwordFocusNode,
+                            formFieldKey: _passwordFieldKey,
+                            label: "",
+                            isPasswordField: true,
+                            isDense: true,
+                            borderRadius: BorderRadius.circular(5.sp),
+                            controller: _passwordTextEditingController,
+                            validator: (value) => validatePassword(false, value),
+                            onChanged: (value){
+                              passwordOnChange();
+                            },
                           ),
-                        ],
-                      ),
-                      const VerticalWhiteSpace(height: 10),
-                      SizedBox(
-                        child: RoundedTextFormField(
-                          focusNode: passwordFocusNode,
-                          formFieldKey: _passwordFieldKey,
-                          label: "",
-                          isPasswordField: true,
-                          isDense: true,
-                          borderRadius: BorderRadius.circular(5.sp),
-                          controller: _passwordTextEditingController,
-                          validator: (value) => validatePassword(false, value),
-                          onChanged: (value){
-                            passwordOnChange();
-                          },
                         ),
-                      ),
-                      const VerticalWhiteSpace(height: 20),
-                      Text(
-                        "Sahkan kata laluan",
-                        style: TextStyle(
-                            fontSize: user.textSizeScale * themeOptions.textSize1,
-                            fontWeight: FontWeight.w500
+                        const VerticalWhiteSpace(height: 20),
+                        Text(
+                          "Sahkan kata laluan",
+                          style: TextStyle(
+                              fontSize: user.textSizeScale * themeOptions.textSize1,
+                              fontWeight: FontWeight.w500
+                          ),
                         ),
-                      ),
-                      const VerticalWhiteSpace(height: 2),
-                      SizedBox(
-                        child: RoundedTextFormField(
-                          focusNode: confirmPasswordFocusNode,
-                          formFieldKey: _confirmFieldKey,
-                          label: "",
-                          isPasswordField: true,
-                          isDense: true,
-                          borderRadius: BorderRadius.circular(5.sp),
-                          controller: _confirmPasswordTextEditingController,
-                          validator: (value) =>
-                              validateConfirmPassword(value, _passwordTextEditingController.text),
-                          onChanged: (value){
-                            passwordOnChange();
-                          },
+                        const VerticalWhiteSpace(height: 2),
+                        SizedBox(
+                          child: RoundedTextFormField(
+                            focusNode: confirmPasswordFocusNode,
+                            formFieldKey: _confirmFieldKey,
+                            label: "",
+                            isPasswordField: true,
+                            isDense: true,
+                            borderRadius: BorderRadius.circular(5.sp),
+                            controller: _confirmPasswordTextEditingController,
+                            validator: (value) =>
+                                validateConfirmPassword(value, _passwordTextEditingController.text),
+                            onChanged: (value){
+                              passwordOnChange();
+                            },
+                          ),
                         ),
-                      ),
+                      ],
                       const VerticalWhiteSpace(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,

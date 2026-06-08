@@ -7,17 +7,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utusan_sarawak/models/user/user.dart';
 import 'package:utusan_sarawak/routes/app_router_delegate.dart';
 import 'package:utusan_sarawak/services/api_service.dart';
+import 'package:utusan_sarawak/services/utusan_link_service.dart';
 import 'package:utusan_sarawak/stores/article_store/article_store.dart';
 import 'package:utusan_sarawak/stores/reward_store/reward_store.dart';
 import 'package:utusan_sarawak/themes/default_theme.dart';
 import 'package:sizer/sizer.dart';
 import 'package:theme_provider/theme_provider.dart';
-import 'package:utusan_sarawak/utils/common_functions.dart';
 import 'package:utusan_sarawak/utils/initialize_get_it.dart';
 import 'package:utusan_sarawak/utils/scroll_position_state.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 final GlobalKey<BeamerState> beamerKey = GlobalKey<BeamerState>();
@@ -48,10 +47,6 @@ Future<void> checkRememberLogIn() async{
 
   }
 
-}
-
-void logMessage(String message){
-  FirebaseCrashlytics.instance.log(message);
 }
 
 void main() async {
@@ -92,57 +87,18 @@ class UtusanSarawak extends StatefulWidget {
 }
 
 class UtusanSarawakState extends State<UtusanSarawak> {
+  final UtusanLinkService _utusanLinkService = UtusanLinkService();
 
   @override
   void initState() {
     super.initState();
-    registerDynamicLinkListener();
-    handleDynamicLinks();
+    _utusanLinkService.init(appRouterDelegate);
   }
 
-  void handleDynamicLinks() async {
-    final articleStore = GetIt.I<ArticleStore>();
-    final PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
-
-    if (initialLink != null) {
-      final Uri deepLink = initialLink.link;
-      String? articleId = deepLink.queryParameters['id'];
-      if (articleId != null) {
-
-        try {
-          await articleStore.getArticles(true).then((value)
-            => appRouterDelegate.beamToNamed("/article/${encodeString(articleId)}", replaceRouteInformation: false));
-        } catch (e, stack) {
-          logMessage("----- IL ERROR: Navigation failed: $e\n$stack");
-        }
-
-      }
-    }
-  }
-
-  void registerDynamicLinkListener() async {
-    final articleStore = GetIt.I<ArticleStore>();
-    FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData? dynamicLink) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async{
-        final Uri? deepLink = dynamicLink?.link;
-        if (deepLink != null) {
-          String? articleId = deepLink.queryParameters['id'];
-          if (articleId != null) {
-
-            try {
-              await articleStore.loadArticleByTitle(articleId).then((value)
-                => appRouterDelegate.beamToNamed("/article/${encodeString(articleId)}", replaceRouteInformation: false));
-            } catch (e, stack) {
-              logMessage("----- ERROR: Navigation failed: $e\n$stack");
-            }
-            
-          }
-        }
-      });
-
-    }).onError((error) {
-      logMessage("----- Error retrieving dynamic link: $error");
-    });
+  @override
+  void dispose() {
+    _utusanLinkService.dispose();
+    super.dispose();
   }
 
   @override
@@ -177,3 +133,6 @@ class UtusanSarawakState extends State<UtusanSarawak> {
     );
   }
 }
+
+
+

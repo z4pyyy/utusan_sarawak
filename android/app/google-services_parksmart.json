@@ -1,0 +1,190 @@
+{
+  "project_info": {
+    "project_number": "468199819098",
+    "project_id": "parking-system-bcfd0",
+    "storage_bucket": "parking-system-bcfd0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468199819098:android:26ac515c58238e52e49563",
+        "android_client_info": {
+          "package_name": "com.example.parking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXMN6ynQku79HhGUXs3CAao5sCoWSa3C0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "468199819098-ln7inlhq2l9l3ldsa341937dhknkc3p5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.parksmart"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468199819098:android:455163992e30dcf5e49563",
+        "android_client_info": {
+          "package_name": "com.example.parksmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXMN6ynQku79HhGUXs3CAao5sCoWSa3C0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "468199819098-ln7inlhq2l9l3ldsa341937dhknkc3p5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.parksmart"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468199819098:android:27df3feb64bac9ace49563",
+        "android_client_info": {
+          "package_name": "com.example.parksmartnow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXMN6ynQku79HhGUXs3CAao5sCoWSa3C0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "468199819098-ln7inlhq2l9l3ldsa341937dhknkc3p5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.parksmart"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468199819098:android:513d05524f6588cae49563",
+        "android_client_info": {
+          "package_name": "com.example.parksmartnowbeta_warden"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXMN6ynQku79HhGUXs3CAao5sCoWSa3C0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "468199819098-ln7inlhq2l9l3ldsa341937dhknkc3p5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.parksmart"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468199819098:android:4bf9ec4c07e000dfe49563",
+        "android_client_info": {
+          "package_name": "com.qm.utusan_sarawak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXMN6ynQku79HhGUXs3CAao5sCoWSa3C0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468199819098-bdlohu4ls448lmtrvmvlarteg8mjg0pp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "468199819098-ln7inlhq2l9l3ldsa341937dhknkc3p5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.parksmart"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

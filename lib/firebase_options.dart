@@ -47,28 +47,32 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAmYvDAYptGjfptOinlDexyytbXfQ7VEgc',
-    appId: '1:468199819098:web:886e1de72f71c779e49563',
-    messagingSenderId: '468199819098',
-    projectId: 'parking-system-bcfd0',
-    authDomain: 'parking-system-bcfd0.firebaseapp.com',
-    storageBucket: 'parking-system-bcfd0.appspot.com',
+    apiKey: 'AIzaSyB82wdz-eV7wfofqob_vfg-xZ7lju3irYU',
+    appId: '1:963033245480:web:7238c7f44964c8846d921d',
+    messagingSenderId: '963033245480',
+    projectId: 'utusan-app',
+    authDomain: 'utusan-app.firebaseapp.com',
+    storageBucket: 'utusan-app.firebasestorage.app',
+    measurementId: 'G-0DF2HB0K78',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAXMN6ynQku79HhGUXs3CAao5sCoWSa3C0',
-    appId: '1:468199819098:android:4bf9ec4c07e000dfe49563',
-    messagingSenderId: '468199819098',
-    projectId: 'parking-system-bcfd0',
-    storageBucket: 'parking-system-bcfd0.appspot.com',
+    apiKey: 'AIzaSyDmIIzEm2qqioc4Ve0CWPGEM2dgg4OPSRc',
+    appId: '1:963033245480:android:16769e82f077129c6d921d',
+    messagingSenderId: '963033245480',
+    projectId: 'utusan-app',
+    storageBucket: 'utusan-app.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAeetcsRfz2ktqBbcSJpDKDPIHmHiLQoQY',
-    appId: '1:468199819098:ios:aa77473bb5a0d6eae49563',
-    messagingSenderId: '468199819098',
-    projectId: 'parking-system-bcfd0',
-    storageBucket: 'parking-system-bcfd0.appspot.com',
+    apiKey: 'AIzaSyBHa8Q4IGee-NF1zwkmb-VlKr2zNlTNI6g',
+    appId: '1:963033245480:ios:51020b53e8ae84186d921d',
+    messagingSenderId: '963033245480',
+    projectId: 'utusan-app',
+    storageBucket: 'utusan-app.firebasestorage.app',
+    androidClientId: '963033245480-ho14ihp7tbki2se9turkvvom8k9uh65m.apps.googleusercontent.com',
+    iosClientId: '963033245480-36o50ndihbe1efurg6cf600tjuqb54c6.apps.googleusercontent.com',
     iosBundleId: 'com.example.utusanSarawak',
   );
+
 }
