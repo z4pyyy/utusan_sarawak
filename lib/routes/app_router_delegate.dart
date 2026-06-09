@@ -1,4 +1,5 @@
 import 'package:beamer/beamer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:utusan_sarawak/components/article_detail_page/image_window.dart';
 import 'package:utusan_sarawak/pages/advertise_page/advertise_page.dart';
@@ -68,10 +69,11 @@ final appRouterDelegate = BeamerDelegate(
 
 class UtusanBeamerParser extends BeamerParser {
   @override
-  RouteInformation parseRouteInformation(Uri uri) {
+  SynchronousFuture<RouteInformation> parseRouteInformation(RouteInformation routeInformation) {
+    final uri = routeInformation.uri;
     if (uri.scheme == 'utusan') {
-      return const RouteInformation(uri: Uri(path: '/top'));
+      return SynchronousFuture(RouteInformation(uri: Uri.parse('/top')));
     }
-    return super.parseRouteInformation(uri);
+    return super.parseRouteInformation(routeInformation);
   }
 }
