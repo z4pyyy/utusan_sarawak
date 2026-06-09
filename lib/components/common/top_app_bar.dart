@@ -232,19 +232,31 @@ class TopAppBarState extends State<TopAppBar> {
                           icon: Icons.share,
                           size: 28,
                           onPressed: () async{
-                            final articleStore = GetIt.I<ArticleStore>();
-                            final title = decodeString(widget.articleId);
-                            Article? article = _findArticle(articleStore, title);
-                            article ??= await _loadArticleByTitle(articleStore, title);
-                            if (article == null) {
-                              debugPrint('TopAppBar: article not found for share: $title');
-                              return;
-                            }
-                            final url = await UtusanLinkService.createArticleLink(article);
-                            if (url != null) {
-                              await Share.share(url);
-                            } else {
-                              debugPrint('TopAppBar: failed to create FlowLinks URL');
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => const Center(child: CircularProgressIndicator()),
+                            );
+                            try {
+                              final articleStore = GetIt.I<ArticleStore>();
+                              final title = decodeString(widget.articleId);
+                              Article? article = _findArticle(articleStore, title);
+                              article ??= await _loadArticleByTitle(articleStore, title);
+                              if (article == null) {
+                                debugPrint('TopAppBar: article not found for share: $title');
+                                if (context.mounted) Navigator.of(context).pop();
+                                return;
+                              }
+                              final url = await UtusanLinkService.createArticleLink(article);
+                              if (context.mounted) Navigator.of(context).pop();
+                              if (url != null) {
+                                await Share.share(url);
+                              } else {
+                                debugPrint('TopAppBar: failed to create FlowLinks URL');
+                              }
+                            } catch (e) {
+                              if (context.mounted) Navigator.of(context).pop();
+                              debugPrint('TopAppBar: share error: $e');
                             }
                           }
                         ),

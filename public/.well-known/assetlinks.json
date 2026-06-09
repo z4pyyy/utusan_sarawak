@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.qm.utusan_sarawak",
+      "sha256_cert_fingerprints": [
+        "92:66:1E:CD:6A:AA:4E:45:94:EA:8D:7A:4D:52:F8:47:CA:11:95:29:A6:62:62:D8:4D:C1:64:17:D9:04:A0:BF",
+        "AB:94:D4:D8:F9:C4:1B:AD:7A:89:D3:4C:02:92:6F:B4:76:6B:E7:59:55:6E:87:00:35:6F:B2:3F:2C:A6:56:4D"
+      ]
+    }
+  }
+]

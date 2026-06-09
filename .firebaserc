@@ -1,0 +1,13 @@
+{
+  "projects": {},
+  "targets": {
+    "utusan-app": {
+      "hosting": {
+        "flowlinks": [
+          "utusan-app-utusan-sarawak"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

@@ -161,16 +161,42 @@ class UtusanLinkService {
     }
     _handledIds.add(idStr);
 
-    await _routeToArticleById(idStr, router);
+    final id = int.tryParse(idStr);
+    if (id != null) {
+      await _routeToArticleById(id, router);
+    } else {
+      await _resolveAndRoute(idStr, router);
+    }
   }
 
-  Future<void> _routeToArticleById(String idStr, BeamerDelegate router) async {
-    final id = int.tryParse(idStr);
-    if (id == null) {
-      debugPrint('UtusanLinkService: invalid article id $idStr');
-      return;
+  Future<void> _resolveAndRoute(String code, BeamerDelegate router) async {
+    try {
+      final res = await _client.get(
+        '$_base/api/resolve/$code',
+        options: Options(responseType: ResponseType.json),
+      );
+      if (res.statusCode != 200) {
+        debugPrint('UtusanLinkService: resolve failed ${res.statusCode}');
+        return;
+      }
+      final data = _asJsonMap(res.data);
+      final resolvedId = data?['id']?.toString();
+      if (resolvedId == null || resolvedId.isEmpty) {
+        debugPrint('UtusanLinkService: resolved data missing id: ${res.data}');
+        return;
+      }
+      final id = int.tryParse(resolvedId);
+      if (id == null) {
+        debugPrint('UtusanLinkService: resolved id not numeric: $resolvedId');
+        return;
+      }
+      await _routeToArticleById(id, router);
+    } catch (e, st) {
+      debugPrint('UtusanLinkService: resolve exception $e\n$st');
     }
+  }
 
+  Future<void> _routeToArticleById(int id, BeamerDelegate router) async {
     final articleStore = GetIt.I<ArticleStore>();
     try {
       final article = await articleStore.loadSingleArticleById(id);
@@ -181,7 +207,7 @@ class UtusanLinkService {
       debugPrint('UtusanLinkService: navigating to /article/$encodedTitle');
       router.beamToNamed('/article/$encodedTitle', replaceRouteInformation: false);
     } catch (e, st) {
-      debugPrint('UtusanLinkService: failed to load article $idStr: $e\n$st');
+      debugPrint('UtusanLinkService: failed to load article $id: $e\n$st');
     }
   }
 

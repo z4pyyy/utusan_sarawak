@@ -1,1 +1,81 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"utusan-app","appId":"1:963033245480:android:16769e82f077129c6d921d","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"utusan-app","configurations":{"android":"1:963033245480:android:16769e82f077129c6d921d","ios":"1:963033245480:ios:51020b53e8ae84186d921d","web":"1:963033245480:web:7238c7f44964c8846d921d"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
+  "hosting": {
+    "target": "flowlinks",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "/.well-known/assetlinks.json",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/api/links",
+        "function": "createFlowLink"
+      },
+      {
+        "source": "/api/resolve/**",
+        "function": "resolveFlowLink"
+      },
+      {
+        "source": "/get-the-app",
+        "destination": "/get-the-app.html"
+      },
+      {
+        "regex": "^/[A-Za-z0-9_-]{4,12}$",
+        "function": "openShort"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "utusan-app",
+          "appId": "1:963033245480:android:16769e82f077129c6d921d",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "utusan-app",
+          "configurations": {
+            "android": "1:963033245480:android:16769e82f077129c6d921d",
+            "ios": "1:963033245480:ios:51020b53e8ae84186d921d",
+            "web": "1:963033245480:web:7238c7f44964c8846d921d"
+          }
+        }
+      }
+    }
+  }
+}

@@ -45,3 +45,7 @@ app.*.map.json
 
 # Environment variables
 .env
+
+# Cloud Functions
+functions/node_modules/
+functions/firebase-debug.log
