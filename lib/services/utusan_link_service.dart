@@ -5,6 +5,7 @@ import 'package:app_links/app_links.dart';
 import 'package:beamer/beamer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:utusan_sarawak/models/article/article.dart';
 import 'package:utusan_sarawak/stores/article_store/article_store.dart';
@@ -28,6 +29,24 @@ class UtusanLinkService {
 
   final Set<String> _handledIds = <String>{};
   bool _isInit = false;
+  OverlayEntry? _loadingOverlay;
+
+  void _showLoading(BeamerDelegate router) {
+    final overlay = router.navigatorKey.currentState?.overlay;
+    if (overlay == null) return;
+    _loadingOverlay = OverlayEntry(
+      builder: (_) => const Material(
+        color: Colors.white,
+        child: Center(child: CircularProgressIndicator()),
+      ),
+    );
+    overlay.insert(_loadingOverlay!);
+  }
+
+  void _hideLoading() {
+    _loadingOverlay?.remove();
+    _loadingOverlay = null;
+  }
 
   static Future<String?> createUtusanLink({
     required String link,
@@ -161,11 +180,16 @@ class UtusanLinkService {
     }
     _handledIds.add(idStr);
 
-    final id = int.tryParse(idStr);
-    if (id != null) {
-      await _routeToArticleById(id, router);
-    } else {
-      await _resolveAndRoute(idStr, router);
+    _showLoading(router);
+    try {
+      final id = int.tryParse(idStr);
+      if (id != null) {
+        await _routeToArticleById(id, router);
+      } else {
+        await _resolveAndRoute(idStr, router);
+      }
+    } finally {
+      _hideLoading();
     }
   }
 

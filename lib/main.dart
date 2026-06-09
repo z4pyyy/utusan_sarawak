@@ -121,7 +121,7 @@ class UtusanSarawakState extends State<UtusanSarawak> {
                 return MaterialApp.router(
                   title: "Utusan Sarawak",
                   theme: Theme.of(context),
-                  routeInformationParser: BeamerParser(),
+                  routeInformationParser: UtusanBeamerParser(),
                   routerDelegate: appRouterDelegate,
                   backButtonDispatcher: BeamerBackButtonDispatcher(
                     delegate: appRouterDelegate,

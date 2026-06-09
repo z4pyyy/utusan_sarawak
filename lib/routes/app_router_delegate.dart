@@ -1,4 +1,5 @@
 import 'package:beamer/beamer.dart';
+import 'package:flutter/widgets.dart';
 import 'package:utusan_sarawak/components/article_detail_page/image_window.dart';
 import 'package:utusan_sarawak/pages/advertise_page/advertise_page.dart';
 import 'package:utusan_sarawak/pages/article_detail_page/article_detail_page.dart';
@@ -64,3 +65,13 @@ final appRouterDelegate = BeamerDelegate(
     },
   ),
 );
+
+class UtusanBeamerParser extends BeamerParser {
+  @override
+  RouteInformation parseRouteInformation(Uri uri) {
+    if (uri.scheme == 'utusan') {
+      return const RouteInformation(uri: Uri(path: '/top'));
+    }
+    return super.parseRouteInformation(uri);
+  }
+}
