@@ -66,6 +66,13 @@
           "fileOutput": "android/app/google-services.json"
         }
       },
+      "ios": {
+        "default": {
+          "projectId": "utusan-app",
+          "appId": "1:963033245480:ios:51020b53e8ae84186d921d",
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
       "dart": {
         "lib/firebase_options.dart": {
           "projectId": "utusan-app",

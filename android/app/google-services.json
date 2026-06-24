@@ -12,7 +12,20 @@
           "package_name": "com.qm.utusan_sarawak"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "963033245480-ho14ihp7tbki2se9turkvvom8k9uh65m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qm.utusan_sarawak",
+            "certificate_hash": "e046adba129b2553d1c1ac2ad9649c8855801eb4"
+          }
+        },
+        {
+          "client_id": "963033245480-gvsnrd0og921klolvbv5lnk6qict4ndp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDmIIzEm2qqioc4Ve0CWPGEM2dgg4OPSRc"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963033245480-gvsnrd0og921klolvbv5lnk6qict4ndp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "963033245480-36o50ndihbe1efurg6cf600tjuqb54c6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.utusanSarawak"
+              }
+            }
+          ]
         }
       }
     }
