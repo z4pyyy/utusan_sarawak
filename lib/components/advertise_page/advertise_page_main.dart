@@ -163,7 +163,7 @@ class AdvertisePageMainState extends State<AdvertisePageMain> {
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(FontAwesomeIcons.store, size: 22,),
+                              FaIcon(FontAwesomeIcons.store, size: 22,),
                               HorizontalWhiteSpace(width: 15),
                               Flexible(
                                 child: Text("Pakar Acara dengan rekod prestasi yang terbukti"),
@@ -187,7 +187,7 @@ class AdvertisePageMainState extends State<AdvertisePageMain> {
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(FontAwesomeIcons.briefcase, size: 22,),
+                              FaIcon(FontAwesomeIcons.briefcase, size: 22,),
                               HorizontalWhiteSpace(width: 15),
                               Flexible(
                                 child: Text("Pembina hubungan jangka panjang"),

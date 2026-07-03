@@ -162,9 +162,35 @@ class _TopStoryMainState extends State<TopStoryMain> {
                     });
 
                     if(stickyArticles.isNotEmpty) {
+                      List<Article> localArticles = List.from(articles);
+                      List<String> toRemoveTitle = [];
+                      for(Article sa in stickyArticles){
+                        for(Article article in localArticles){
+                          if(article.title == sa.title){
+                            toRemoveTitle.add(article.title);
+                          }
+                        }
+                      }
+                      for(String title in toRemoveTitle){
+                        localArticles.removeWhere((article) => article.title == title);
+                      }
 
                       return Column(
                         children: [
+                          // First row of news articles
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SingleArticle(article: localArticles[0], isSingleArticle: true, scrollPosition: scrollOffset, isTab: true,),
+                                const VerticalWhiteSpace(height: 20),
+                                TwoArticlesRow(articles: localArticles, startIndex: 1, scrollPosition: scrollOffset, isTab: true,),
+                              ],
+                            ),
+                          ),
+                          // Penting section below first row
                           Container(
                             decoration: BoxDecoration(
                               color: themeOptions.primaryColorLight.withOpacity(0.35),
@@ -206,11 +232,26 @@ class _TopStoryMainState extends State<TopStoryMain> {
                               ],
                             ),
                           ),
-                          const VerticalWhiteSpace(height: 30),
-                          topStoryArticleDisplay(true),
+                          const VerticalWhiteSpace(height: 10),
+                          // Rest of articles
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const AdsCard(dividerAbove: true, marginTop: 10,),
+                                ArticleList(articles: localArticles, startIndex: 3, count: 5, scrollPosition: scrollOffset, isTab: true,),
+                                const AdsCard(dividerAbove: true, marginTop: 10,),
+                                ArticleList(articles: localArticles, startIndex: 8, count: 7, scrollPosition: scrollOffset, isTab: true,),
+                                const AdsCard(dividerAbove: true, marginTop: 10,),
+                                ArticleList(articles: localArticles, startIndex: 16, count: 5, scrollPosition: scrollOffset, isTab: true,),
+                                const VerticalWhiteSpace(height: 50),
+                              ],
+                            ),
+                          ),
                         ],
                       );
-
 
                     }else{
                       return topStoryArticleDisplay(false);

@@ -73,6 +73,27 @@ String decodeString(String input) {
   return decodedInput;
 }
 
+String? extractYoutubeUrl(String html) {
+  final patterns = [
+    RegExp(r'(?:https?://)?(?:www\.)?youtube\.com/watch\?v=[\w-]+'),
+    RegExp(r'(?:https?://)?(?:www\.)?youtube\.com/embed/[\w-]+'),
+    RegExp(r'(?:https?://)?youtu\.be/[\w-]+'),
+  ];
+  for (final pattern in patterns) {
+    final match = pattern.firstMatch(html);
+    if (match != null) {
+      var url = match.group(0)!;
+      if (!url.startsWith('http')) url = 'https://$url';
+      if (url.contains('/embed/')) {
+        final videoId = url.split('/embed/').last.split('?').first;
+        url = 'https://www.youtube.com/watch?v=$videoId';
+      }
+      return url;
+    }
+  }
+  return null;
+}
+
 List<dynamic> getTagDetails(Article article){
   List<dynamic> tagDetails = [];
   final articleStore = GetIt.I<ArticleStore>();

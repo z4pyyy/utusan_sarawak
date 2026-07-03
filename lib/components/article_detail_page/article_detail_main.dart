@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:utusan_sarawak/components/article_detail_page/static_ads_card.dart';
 import 'package:utusan_sarawak/components/common/horizontal_white_space.dart';
 import 'package:utusan_sarawak/components/common/vertical_white_space.dart';
@@ -168,13 +169,37 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
           children: [
             GestureDetector(
               onTap: (){
-                customBeamToNamed(context, scrollOffset, "/image/${encodeString(article.imagePath)}");
+                final youtubeUrl = extractYoutubeUrl(article.content[0]["paragraph"] ?? "");
+                if (youtubeUrl != null) {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (ctx) => Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text("Open In Youtube", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(ctx);
+                              launchUrl(Uri.parse(youtubeUrl), mode: LaunchMode.externalApplication);
+                            },
+                            child: const Text("OPEN"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  customBeamToNamed(context, scrollOffset, "/image/${encodeString(article.imagePath)}");
+                }
               },
               child: Image.network(
                 article.imagePath,
                 fit: BoxFit.contain,
                 errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                  return Image.asset('assets/image/grey_background.jpg'); // Fallback to a local image
+                  return Image.asset('assets/image/grey_background.jpg');
                 },
               ),
             ),
@@ -270,6 +295,10 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
                                   color: themeOptions.textColor,
                                   fontSize: user.textSizeScale * themeOptions.textSize2,
                                 ),
+                                onTapImage: (imageMetadata) {
+                                  final url = imageMetadata.sources.first.url;
+                                  customBeamToNamed(context, scrollOffset, "/image/${encodeString(url)}");
+                                },
                               ),
 
                               const AdsCard(marginTop: 40),
@@ -280,6 +309,10 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
                                   color: themeOptions.textColor,
                                   fontSize: user.textSizeScale * themeOptions.textSize2,
                                 ),
+                                onTapImage: (imageMetadata) {
+                                  final url = imageMetadata.sources.first.url;
+                                  customBeamToNamed(context, scrollOffset, "/image/${encodeString(url)}");
+                                },
                               ),
 
                             ],
@@ -345,7 +378,7 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
                                             height: ImageSettings.listImageHeight,
                                             alignment: Alignment.topCenter,
                                             errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                                              return Image.asset('assets/image/grey_background.jpg'); // Fallback to a local image
+                                              return Image.asset('assets/image/grey_background.jpg');
                                             },
                                           ),
                                         ),

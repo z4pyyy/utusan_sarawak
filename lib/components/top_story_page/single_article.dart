@@ -77,22 +77,60 @@ class SingleArticleState extends State<SingleArticle> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if(widget.isSingleArticle)
-            Image.network(
-              widget.article.imagePath,
-              fit: BoxFit.fitWidth,
-              errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                return Image.asset('assets/image/grey_background.jpg'); // Fallback to a local image
-              },
+            Stack(
+              children: [
+                Image.network(
+                  widget.article.imagePath,
+                  fit: BoxFit.fitWidth,
+                  errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                    return Image.asset('assets/image/grey_background.jpg');
+                  },
+                ),
+                if(extractYoutubeUrl(widget.article.content[0]["paragraph"] ?? "") != null)
+                  Positioned(
+                    top: 8, right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.play_arrow, color: Colors.white, size: 16),
+                          Text("YT", style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
             ),
           if(!widget.isSingleArticle)
             Center(
-              child: Image.network(
-                widget.article.imagePath,
-                fit: BoxFit.scaleDown,
-                height: ImageSettings.twoImageHeight,
-                errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                  return Image.asset('assets/image/grey_background.jpg'); // Fallback to a local image
-                },
+              child: Stack(
+                children: [
+                  Image.network(
+                    widget.article.imagePath,
+                    fit: BoxFit.scaleDown,
+                    height: ImageSettings.twoImageHeight,
+                    errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                      return Image.asset('assets/image/grey_background.jpg');
+                    },
+                  ),
+                  if(extractYoutubeUrl(widget.article.content[0]["paragraph"] ?? "") != null)
+                    Positioned(
+                      top: 4, right: 4,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Icon(Icons.play_arrow, color: Colors.white, size: 14),
+                      ),
+                    ),
+                ],
               ),
             ),
           const VerticalWhiteSpace(height: 10),

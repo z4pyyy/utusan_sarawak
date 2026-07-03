@@ -109,7 +109,7 @@ class BottomNavBarState extends State<BottomNavBar> {
                         width: 28,
                         height: 28,
                         child: Center(
-                          child: Icon(FontAwesomeIcons.magnifyingGlass, size: 22),
+                          child: FaIcon(FontAwesomeIcons.magnifyingGlass, size: 22),
                         ),
                       ),
                       label: "Cari",
@@ -119,7 +119,7 @@ class BottomNavBarState extends State<BottomNavBar> {
                         width: 28,
                         height: 28,
                         child: Center(
-                          child: Icon(FontAwesomeIcons.gift, size: 22),
+                          child: FaIcon(FontAwesomeIcons.gift, size: 22),
                         ),
                       ),
                       label: "Ganjaran",

@@ -96,14 +96,30 @@ class ArticleListState extends State<ArticleList> {
                   children: [
                     Expanded(
                       flex: 2,
-                      child: Image.network(
-                        articles[listIndex + widget.startIndex].imagePath,
-                        fit: BoxFit.scaleDown,
-                        height: ImageSettings.listImageHeight,
-                        alignment: Alignment.topCenter,
-                        errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                          return Image.asset('assets/image/grey_background.jpg'); // Fallback to a local image
-                        },
+                      child: Stack(
+                        children: [
+                          Image.network(
+                            articles[listIndex + widget.startIndex].imagePath,
+                            fit: BoxFit.scaleDown,
+                            height: ImageSettings.listImageHeight,
+                            alignment: Alignment.topCenter,
+                            errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                              return Image.asset('assets/image/grey_background.jpg');
+                            },
+                          ),
+                          if(extractYoutubeUrl(articles[listIndex + widget.startIndex].content[0]["paragraph"] ?? "") != null)
+                            Positioned(
+                              top: 4, right: 4,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Icon(Icons.play_arrow, color: Colors.white, size: 14),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                     const HorizontalWhiteSpace(width: 15),

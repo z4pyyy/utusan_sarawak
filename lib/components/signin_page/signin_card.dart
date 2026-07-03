@@ -608,7 +608,7 @@ class SigninCardState extends State<SigninCard> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(FontAwesomeIcons.apple, size: 24),
+                              const FaIcon(FontAwesomeIcons.apple, size: 24),
                               const SizedBox(width: 12),
                               Flexible(
                                 child: FittedBox(
@@ -660,7 +660,7 @@ class SigninCardState extends State<SigninCard> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(FontAwesomeIcons.google, size: 20),
+                              const FaIcon(FontAwesomeIcons.google, size: 20),
                               const SizedBox(width: 12),
                               Flexible(
                                 child: FittedBox(
