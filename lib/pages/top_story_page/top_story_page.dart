@@ -5,6 +5,7 @@ import 'package:utusan_sarawak/components/common/top_app_bar_with_tab.dart';
 import 'package:utusan_sarawak/themes/theme_options.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:utusan_sarawak/utils/custom_app_store_upgrader.dart';
 import 'package:utusan_sarawak/utils/custom_upgrader_messages.dart';
 
 class TopStoryPage extends StatefulWidget {
@@ -41,6 +42,10 @@ class _TopStoryPageState extends State<TopStoryPage> {
           languageCode: 'en',
           durationUntilAlertAgain: const Duration(hours: 48),
           messages: CustomUpgradeMessages(),
+          storeController: UpgraderStoreController(
+            onAndroid: UpgraderStoreController.onAndroidStore,
+            oniOS: () => AppleIdAppStore(appleId: '6738598230'),
+          ),
         ),
         showIgnore: false,
         showReleaseNotes: false,

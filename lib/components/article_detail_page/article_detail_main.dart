@@ -195,12 +195,34 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
                   customBeamToNamed(context, scrollOffset, "/image/${encodeString(article.imagePath)}");
                 }
               },
-              child: Image.network(
-                article.imagePath,
-                fit: BoxFit.contain,
-                errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                  return Image.asset('assets/image/grey_background.jpg');
-                },
+              child: Stack(
+                children: [
+                  Image.network(
+                    article.imagePath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                      return Image.asset('assets/image/grey_background.jpg');
+                    },
+                  ),
+                  if(extractYoutubeUrl(article.content[0]["paragraph"] ?? "") != null)
+                    Positioned(
+                      top: 8, right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.play_arrow, color: Colors.white, size: 16),
+                            Text("YT", style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
             Container(
