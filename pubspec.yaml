@@ -67,6 +67,7 @@ dependencies:
   upgrader: ^10.3.0
   version: ^3.0.2
   url_launcher: ^6.1.0
+  youtube_player_iframe: ^5.2.1
   path_provider: 2.1.5
 
 dependency_overrides:

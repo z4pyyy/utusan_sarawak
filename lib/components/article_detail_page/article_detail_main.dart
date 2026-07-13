@@ -17,6 +17,7 @@ import 'package:utusan_sarawak/utils/common_functions.dart';
 import 'package:utusan_sarawak/utils/image_settings.dart';
 import 'package:utusan_sarawak/utils/scroll_position_state.dart';
 import 'package:utusan_sarawak/utils/time_display_formatter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class ArticleDetailMain extends StatefulWidget {
   const ArticleDetailMain({Key? key, required this.title}) : super(key: key);
@@ -45,6 +46,11 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
   bool hasScroll = false;
 
   late Future<void> future;
+
+  final GlobalKey _bannerKey = GlobalKey();
+  YoutubePlayerController? _youtubeController;
+  String? _youtubeUrl;
+  bool _youtubeAutoPlayed = false;
 
   @override
   void initState(){
@@ -131,13 +137,38 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
     );
 
     scrollOffset = initialOffset;
+
+    final youtubeUrl = extractYoutubeUrl(article.content[0]["paragraph"] ?? "");
+    if (youtubeUrl != null) {
+      final videoId = YoutubePlayerController.convertUrlToId(youtubeUrl);
+      if (videoId != null) {
+        _youtubeUrl = youtubeUrl;
+        _youtubeController = YoutubePlayerController.fromVideoId(
+          videoId: videoId,
+          autoPlay: false,
+          params: const YoutubePlayerParams(showControls: true, mute: false),
+        );
+      }
+    }
+
     scrollController.addListener(() {
       setState(() {
         scrollOffset = scrollController.offset;
       });
+      _maybeAutoPlayYoutube();
     });
 
     future = loadRelatedArticles(article.category);
+  }
+
+  void _maybeAutoPlayYoutube() {
+    if (_youtubeController == null || _youtubeAutoPlayed) return;
+    final bannerHeight = _bannerKey.currentContext?.size?.height;
+    if (bannerHeight == null) return;
+    if (scrollController.offset >= bannerHeight) {
+      _youtubeAutoPlayed = true;
+      _youtubeController!.playVideo();
+    }
   }
 
   Future<void> loadRelatedArticles(String category) async{
@@ -153,6 +184,7 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
   @override
   void dispose() {
     scrollController.dispose();
+    _youtubeController?.close();
     super.dispose();
   }
 
@@ -168,32 +200,9 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
         child: Column(
           children: [
             GestureDetector(
+              key: _bannerKey,
               onTap: (){
-                final youtubeUrl = extractYoutubeUrl(article.content[0]["paragraph"] ?? "");
-                if (youtubeUrl != null) {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (ctx) => Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text("Open In Youtube", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(ctx);
-                              launchUrl(Uri.parse(youtubeUrl), mode: LaunchMode.externalApplication);
-                            },
-                            child: const Text("OPEN"),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                } else {
-                  customBeamToNamed(context, scrollOffset, "/image/${encodeString(article.imagePath)}");
-                }
+                customBeamToNamed(context, scrollOffset, "/image/${encodeString(article.imagePath)}");
               },
               child: Stack(
                 children: [
@@ -204,7 +213,7 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
                       return Image.asset('assets/image/grey_background.jpg');
                     },
                   ),
-                  if(extractYoutubeUrl(article.content[0]["paragraph"] ?? "") != null)
+                  if(_youtubeController != null)
                     Positioned(
                       top: 8, right: 8,
                       child: Container(
@@ -264,7 +273,42 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
                         fontWeight: FontWeight.w500,
                         fontSize: user.textSizeScale * themeOptions.textTitleSize1),
                   ),
-                  const VerticalWhiteSpace(height: 15),
+                ],
+              ),
+            ),
+            if(_youtubeController != null)
+              SizedBox(
+                width: double.infinity,
+                child: StreamBuilder<YoutubePlayerValue>(
+                  initialData: _youtubeController!.value,
+                  stream: _youtubeController!.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.data?.hasError ?? false) {
+                      return AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Container(
+                          color: Colors.black,
+                          alignment: Alignment.center,
+                          child: TextButton.icon(
+                            onPressed: () {
+                              launchUrl(Uri.parse(_youtubeUrl!), mode: LaunchMode.externalApplication);
+                            },
+                            icon: const Icon(Icons.play_circle_outline, color: Colors.white),
+                            label: const Text("Watch on YouTube", style: TextStyle(color: Colors.white)),
+                          ),
+                        ),
+                      );
+                    }
+                    return YoutubePlayer(controller: _youtubeController!);
+                  },
+                ),
+              ),
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
                     toDisplayString(article.published, false),
                     style: TextStyle(fontSize: user.textSizeScale * themeOptions.textSize3),
