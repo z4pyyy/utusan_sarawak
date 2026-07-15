@@ -17,7 +17,7 @@ import 'package:utusan_sarawak/utils/common_functions.dart';
 import 'package:utusan_sarawak/utils/image_settings.dart';
 import 'package:utusan_sarawak/utils/scroll_position_state.dart';
 import 'package:utusan_sarawak/utils/time_display_formatter.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ArticleDetailMain extends StatefulWidget {
   const ArticleDetailMain({Key? key, required this.title}) : super(key: key);
@@ -140,13 +140,12 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
 
     final youtubeUrl = extractYoutubeUrl(article.content[0]["paragraph"] ?? "");
     if (youtubeUrl != null) {
-      final videoId = YoutubePlayerController.convertUrlToId(youtubeUrl);
+      final videoId = YoutubePlayer.convertUrlToId(youtubeUrl);
       if (videoId != null) {
         _youtubeUrl = youtubeUrl;
-        _youtubeController = YoutubePlayerController.fromVideoId(
-          videoId: videoId,
-          autoPlay: false,
-          params: const YoutubePlayerParams(showControls: true, mute: false),
+        _youtubeController = YoutubePlayerController(
+          initialVideoId: videoId,
+          flags: const YoutubePlayerFlags(autoPlay: false, mute: false),
         );
       }
     }
@@ -167,7 +166,7 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
     if (bannerHeight == null) return;
     if (scrollController.offset >= bannerHeight) {
       _youtubeAutoPlayed = true;
-      _youtubeController!.playVideo();
+      _youtubeController!.play();
     }
   }
 
@@ -184,7 +183,7 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
   @override
   void dispose() {
     scrollController.dispose();
-    _youtubeController?.close();
+    _youtubeController?.dispose();
     super.dispose();
   }
 
@@ -279,11 +278,10 @@ class _ArticleDetailMainState extends State<ArticleDetailMain> {
             if(_youtubeController != null)
               SizedBox(
                 width: double.infinity,
-                child: StreamBuilder<YoutubePlayerValue>(
-                  initialData: _youtubeController!.value,
-                  stream: _youtubeController!.stream,
-                  builder: (context, snapshot) {
-                    if (snapshot.data?.hasError ?? false) {
+                child: ValueListenableBuilder<YoutubePlayerValue>(
+                  valueListenable: _youtubeController!,
+                  builder: (context, value, child) {
+                    if (value.hasError) {
                       return AspectRatio(
                         aspectRatio: 16 / 9,
                         child: Container(
